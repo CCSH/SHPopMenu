@@ -55,6 +55,8 @@ static NSString *reuseIdentifier = @"cell";
         _contentView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
         _contentView.backgroundColor = [UIColor whiteColor];
         _contentView.scrollEnabled = NO;
+        _contentView.bounces = YES;
+        _contentView.showsVerticalScrollIndicator = NO;
         //内容
         [self.container addSubview:_contentView];
     }
@@ -132,7 +134,15 @@ static NSString *reuseIdentifier = @"cell";
     // 设置容器的frame
     long count = self.mList.count;
     long height = self.contentH*count;
-    self.container.frame = CGRectMake(x , y + 7, self.menuW, height);
+    
+    CGFloat max_h = self.superview.frame.size.height - y - 7 - 50;
+    
+    if (height > max_h) {
+        height = max_h;
+        self.contentView.scrollEnabled = YES;
+    }
+
+    self.container.frame = CGRectMake(x , y + 6.5, self.menuW, height);
     
     // 设置容器里面内容的frame
     CGFloat topMargin = 2;
@@ -156,6 +166,9 @@ static NSString *reuseIdentifier = @"cell";
             break;
         case SHPopMenuArrowPositionRight://右
             self.imageArrow.frame = CGRectMake(x + self.menuW - 35,y, self.contentH, 7);
+            break;
+        default://左
+            self.imageArrow.frame = CGRectMake(x + 10, y, self.contentH, 7);
             break;
     }
     
@@ -190,6 +203,7 @@ static NSString *reuseIdentifier = @"cell";
         
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
         cell.textLabel.font = [UIFont systemFontOfSize:14];
+        cell.imageView.backgroundColor = [UIColor orangeColor];
     }
     
     //取出内容
