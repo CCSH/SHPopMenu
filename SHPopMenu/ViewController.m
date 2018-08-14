@@ -27,7 +27,7 @@
     
     
     //显示菜单
-    [self.menu showInRectX:100 rectY:64 block:^(SHPopMenu *menu, NSInteger index) {
+    [self.menu showInRectX:10 rectY:64 block:^(SHPopMenu *menu, NSInteger index) {
         //消失
         [menu dismiss];
         
@@ -40,33 +40,11 @@
     if (!_menu) {
         _menu = [[SHPopMenu alloc]init];
         _menu.dimBackground = YES;
-        _menu.arrowPosition = SHPopMenuArrowPositionCenter;
+        _menu.arrowPosition = SHPopMenuArrowPositionLeft;
         _menu.contentH = 40;
         
         //图片+文字
         _menu.mList = @[@{@"icon":@"发起群聊"},@{@"icon":@"添加朋友"},@{@"icon":@"扫一扫"},@{@"icon":@"收付款"}];
-
-        _menu.menuW = 0.0;
-        for (NSDictionary *obj in self.menu.mList) {
-            
-            CGSize size = [obj.allValues[0] boundingRectWithSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX)  options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
-            //宽度
-            _menu.menuW = MAX(size.width, _menu.menuW);
-        }
-        _menu.menuW += 75;
-        
-        //文字
-//        _menu.mList = @[@"发起群聊",@"添加朋友",@"扫一扫",@"收付款"];
-//        
-//        _menu.menuW = 0.0;
-//        for (NSString *obj in self.menu.mList) {
-//            
-//            CGSize size = [obj boundingRectWithSize:CGSizeMake(self.view.frame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
-//            //宽度
-//            _menu.menuW = MAX(size.width, _menu.menuW);
-//        }
-//        _menu.menuW += 40;
-        
     }
     return _menu;
 }

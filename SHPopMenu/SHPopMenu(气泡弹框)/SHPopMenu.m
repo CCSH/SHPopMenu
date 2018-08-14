@@ -101,6 +101,35 @@ static NSString *reuseIdentifier = @"cell";
     return _imageArrow;
 }
 
+- (void)setMList:(NSArray *)mList{
+    _mList = mList;
+    
+    //计算宽度
+    self.menuW = 0.0;
+    for (id obj in mList) {
+        
+        if ([obj isKindOfClass:[NSDictionary class]]) {//文字 + 图片
+            
+            NSDictionary *dic = (NSDictionary *)obj;
+            CGSize size = [dic.allValues[0] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX)  options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
+            //宽度(文字 + 图片 + 左右的间距)
+            self.menuW = MAX(size.width + 75, self.menuW);
+            
+        }else if ([obj isKindOfClass:[NSString class]]){//文字
+            
+            CGSize size = [obj boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
+            //宽度(文字 + 左右的间距)
+            self.menuW = MAX(size.width + 40, self.menuW);
+            
+        }else if ([obj isKindOfClass:[NSAttributedString class]]){//富文本
+            NSAttributedString *att = (NSAttributedString *)obj;
+            CGSize size = [att boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+            //宽度(文字 + 左右的间距)
+            self.menuW = MAX(size.width + 40, self.menuW);
+        }
+    }
+}
+
 #pragma mark - 内部方法
 - (void)coverClick
 {
@@ -113,11 +142,9 @@ static NSString *reuseIdentifier = @"cell";
     _dimBackground = dimBackground;
     
     if (dimBackground) {
-        self.cover.backgroundColor = [UIColor blackColor];
-        self.cover.alpha = 0.2;
+        self.cover.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
     } else {
-        self.cover.backgroundColor = [UIColor clearColor];
-        self.cover.alpha = 1.0;
+        self.cover.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
     }
 }
 
@@ -203,7 +230,7 @@ static NSString *reuseIdentifier = @"cell";
         
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
         cell.textLabel.font = [UIFont systemFontOfSize:14];
-        cell.imageView.backgroundColor = [UIColor orangeColor];
+        cell.imageView.backgroundColor = [UIColor lightGrayColor];
     }
     
     //取出内容
@@ -212,15 +239,16 @@ static NSString *reuseIdentifier = @"cell";
     if ([obj isKindOfClass:[NSDictionary class]]) {//字典：图片为key、内容为obj
         
         NSDictionary *dic = obj;
-        
         cell.textLabel.text = dic.allValues[0];
         cell.imageView.image = [self imageWithImage:[UIImage imageNamed:dic.allKeys[0]] size:CGSizeMake(self.contentH/2, self.contentH/2)];
-        
     }else if ([obj isKindOfClass:[NSString class]]){//字符串：只有内容
         
         NSString *str = obj;
-        
         cell.textLabel.text = str;
+    }else if ([obj isKindOfClass:[NSAttributedString class]]){//富文本
+        
+        NSAttributedString *att = obj;
+        cell.textLabel.attributedText = att;
     }
     
     return cell;
