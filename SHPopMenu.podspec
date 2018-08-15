@@ -1,14 +1,15 @@
 Pod::Spec.new do |s|
 
-s.name         = "SHPopMenu"
-s.version      = "0.0.1"
-s.summary      = "气泡弹框"
-s.homepage     = 'https://github.com/CCSH/SHPopMenu'
-s.license      = 'MIT'
-s.authors      = {'CSH' => '624089195@qq.com'}
-s.platform     = :ios, '6.0'
-s.source       = {:git => 'https://github.com/CCSH/SHPopMenu.git', :tag => s.version}
-s.source_files = 'SHPopMenu/**/*.{h,m}'
-s.requires_arc = true
+    s.name         = "SHPopMenu"
+    s.version      = "0.0.2"
+    s.summary      = "气泡弹框"
+    s.homepage     = 'https://github.com/CCSH/SHPopMenu'
+    s.license      = 'MIT'
+    s.authors      = {'CSH' => '624089195@qq.com'}
+    s.platform     = :ios, '6.0'
+    s.source       = {:git => 'https://github.com/CCSH/SHPopMenu.git', :tag => s.version}
+    s.source_files = 'SHPopMenu/**/*.{h,m}'
+    s.resource     = 'SHPopMenu/SHPopMenu/popu_arrow.png'
+    s.requires_arc = true
 
 end
