@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
     s.platform     = :ios, '6.0'
     s.source       = {:git => 'https://github.com/CCSH/SHPopMenu.git', :tag => s.version}
     s.source_files = 'SHPopMenu/**/*.{h,m}'
-    s.resource     = 'SHPopMenu/SHPopMenu/popu_arrow.png'
+    s.resource     = 'SHPopMenu/popu_arrow.png'
     s.requires_arc = true
 
 end
