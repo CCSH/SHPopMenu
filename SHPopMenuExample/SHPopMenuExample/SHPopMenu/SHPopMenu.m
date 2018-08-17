@@ -94,7 +94,10 @@ static NSString *reuseIdentifier = @"cell";
     if (!_imageArrow) {
         //箭头
         UIImageView *imageArrow = [[UIImageView alloc]init];
-        imageArrow.image = [UIImage imageNamed:@"popu_arrow"];
+        NSBundle *bundle = [NSBundle bundleForClass:self.class];
+        NSString *file = [bundle pathForResource:@"popu_arrow" ofType:@"png"];
+        UIImage *image = [UIImage imageWithContentsOfFile:file];
+        imageArrow.image = image;
         [self addSubview:imageArrow];
         _imageArrow = imageArrow;
     }

@@ -141,8 +141,8 @@
 		5C020D592124135400F8AFBB /* SHPopMenu */ = {
 			isa = PBXGroup;
 			children = (
-				5C020D5A2124135400F8AFBB /* SHPopMenu.m */,
 				5C020D5B2124135400F8AFBB /* SHPopMenu.h */,
+				5C020D5A2124135400F8AFBB /* SHPopMenu.m */,
 				5C020D5C2124135400F8AFBB /* popu_arrow.png */,
 			);
 			path = SHPopMenu;
