@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "SHPopMenu"
-    s.version      = "1.0.1"
+    s.version      = "1.0.2"
     s.summary      = "气泡弹框"
     s.homepage     = "https://github.com/CCSH/SHPopMenu"
     s.license      = "MIT"
