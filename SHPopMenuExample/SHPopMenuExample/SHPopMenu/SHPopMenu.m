@@ -197,12 +197,12 @@ static NSString *reuseIdentifier = @"cell";
     frame.origin.y = y;
     
     switch (self.arrowPosition) {
-        case SHPopMenuArrowPositionCenter://中
+        case SHPopMenuArrow_center://中
         {
             frame.origin.x = self.container.center.x - CGRectGetWidth(self.imageArrow.frame)/2;
         }
             break;
-        case SHPopMenuArrowPositionLeft://左
+        case SHPopMenuArrow_left://左
         {
             frame.origin.x = x + 10;
         }

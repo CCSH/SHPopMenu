@@ -12,10 +12,10 @@
  *  下拉菜单
  **/
 typedef enum {
-    SHPopMenuArrowPositionCenter = 0,
-    SHPopMenuArrowPositionLeft = 1,
-    SHPopMenuArrowPositionRight = 2
-} SHPopMenuArrowPosition;
+    SHPopMenuArrow_center,// 中间
+    SHPopMenuArrow_left,//左
+    SHPopMenuArrow_right//右
+} SHPopMenuArrow;
 
 @interface SHPopMenu : UIView
 
@@ -29,7 +29,7 @@ typedef enum {
 //是否有遮罩
 @property (nonatomic, assign) BOOL dimBackground;
 //方向(默认 右)
-@property (nonatomic, assign) SHPopMenuArrowPosition arrowPosition;
+@property (nonatomic, assign) SHPopMenuArrow arrowPosition;
 //内容高度（默认 44）
 @property (nonatomic, assign) CGFloat contentH;
 //箭头图片（有默认）
