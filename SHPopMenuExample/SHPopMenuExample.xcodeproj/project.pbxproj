@@ -16,7 +16,7 @@
 		5C020D41212412DC00F8AFBB /* SHPopMenuExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C020D40212412DC00F8AFBB /* SHPopMenuExampleTests.m */; };
 		5C020D4C212412DC00F8AFBB /* SHPopMenuExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C020D4B212412DC00F8AFBB /* SHPopMenuExampleUITests.m */; };
 		5C020D5D2124135400F8AFBB /* SHPopMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C020D5A2124135400F8AFBB /* SHPopMenu.m */; };
-		5C020D5E2124135400F8AFBB /* popu_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C020D5C2124135400F8AFBB /* popu_arrow.png */; };
+		5C4EE78A216CA6B700BFA1A9 /* pop_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C4EE788216CA6B700BFA1A9 /* pop_arrow.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +55,7 @@
 		5C020D4D212412DC00F8AFBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C020D5A2124135400F8AFBB /* SHPopMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHPopMenu.m; sourceTree = "<group>"; };
 		5C020D5B2124135400F8AFBB /* SHPopMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHPopMenu.h; sourceTree = "<group>"; };
-		5C020D5C2124135400F8AFBB /* popu_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popu_arrow.png; sourceTree = "<group>"; };
+		5C4EE788216CA6B700BFA1A9 /* pop_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pop_arrow.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,9 +141,9 @@
 		5C020D592124135400F8AFBB /* SHPopMenu */ = {
 			isa = PBXGroup;
 			children = (
+				5C4EE788216CA6B700BFA1A9 /* pop_arrow.png */,
 				5C020D5B2124135400F8AFBB /* SHPopMenu.h */,
 				5C020D5A2124135400F8AFBB /* SHPopMenu.m */,
-				5C020D5C2124135400F8AFBB /* popu_arrow.png */,
 			);
 			path = SHPopMenu;
 			sourceTree = "<group>";
@@ -251,10 +251,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C4EE78A216CA6B700BFA1A9 /* pop_arrow.png in Resources */,
 				5C020D34212412DC00F8AFBB /* LaunchScreen.storyboard in Resources */,
 				5C020D31212412DC00F8AFBB /* Assets.xcassets in Resources */,
 				5C020D2F212412DB00F8AFBB /* Main.storyboard in Resources */,
-				5C020D5E2124135400F8AFBB /* popu_arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

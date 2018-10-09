@@ -27,9 +27,8 @@
     
     
     //显示菜单
-    [self.menu showInRectX:10 rectY:64 block:^(SHPopMenu *menu, NSInteger index) {
-        //消失
-        [menu dismiss];
+    [self.menu showInRectX:(self.view.frame.size.width - self.menu.menuW - 10) rectY:64 block:^(SHPopMenu *menu, NSInteger index) {
+      
         
         NSLog(@"点击了 --- %ld",(long)index);
     }];
@@ -40,11 +39,11 @@
     if (!_menu) {
         _menu = [[SHPopMenu alloc]init];
         _menu.dimBackground = YES;
-        _menu.arrowPosition = SHPopMenuArrowPositionLeft;
-        _menu.contentH = 40;
+        _menu.arrowPosition = SHPopMenuArrowPositionRight;
+//        //图片+文字
+//        _menu.mList = @[@{@"icon":@"发起群聊"},@{@"icon":@"添加朋友"},@{@"icon":@"扫一扫"},@{@"icon":@"收付款"}];
         
-        //图片+文字
-        _menu.mList = @[@{@"icon":@"发起群聊"},@{@"icon":@"添加朋友"},@{@"icon":@"扫一扫"},@{@"icon":@"收付款"}];
+        _menu.mList = @[@"发起群聊",@"添加朋友",@"扫一扫",@"收付款"];
     }
     return _menu;
 }

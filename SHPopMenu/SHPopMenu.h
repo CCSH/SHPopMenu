@@ -19,16 +19,35 @@ typedef enum {
 
 @interface SHPopMenu : UIView
 
+#pragma mark - 必须设置
+//内容
+@property (nonatomic, copy) NSArray *mList;
+
+#pragma mark - 根据需求设置
+//宽度（不用赋值，内部有计算）
+@property (nonatomic, assign) CGFloat menuW;
 //是否有遮罩
 @property (nonatomic, assign) BOOL dimBackground;
-//方向
+//方向(默认 右)
 @property (nonatomic, assign) SHPopMenuArrowPosition arrowPosition;
-//内容
-@property (nonatomic, strong) NSArray *mList;
-//宽度
-@property (nonatomic, assign) CGFloat menuW;
-//内容高度
+//内容高度（默认 44）
 @property (nonatomic, assign) CGFloat contentH;
+//箭头图片（有默认）
+@property (nonatomic, copy) UIImage *arrowImage;
+
+//内部文字设置
+//字体（默认： [UIFont systemFontOfSize:14]）
+@property (nonatomic, copy) UIFont *font;
+//字体颜色（默认：[UIColor whiteColor]）
+@property (nonatomic, copy) UIColor *textColor;
+//分割线颜色（默认 [UIColor whiteColor]）
+@property (nonatomic, copy) UIColor *separatorColor;
+
+//内部容器设置（设置一个就好）
+//背景颜色（默认 42.42.42）
+@property (nonatomic, copy) UIColor *contentColor;
+//背景图片
+@property (nonatomic, copy) UIImage *contentImage;
 
 /**
  *  显示菜单

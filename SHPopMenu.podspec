@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name         = "SHPopMenu"
-    s.version      = "1.0.0"
+    s.version      = "1.0.1"
     s.summary      = "气泡弹框"
     s.homepage     = "https://github.com/CCSH/SHPopMenu"
     s.license      = "MIT"
@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.source       = { :git => "https://github.com/CCSH/SHPopMenu.git", :tag => s.version }
     s.source_files = "SHPopMenu/*.{h,m}"
-    s.resource     = "SHPopMenu/popu_arrow.png"
+    s.resource     = "SHPopMenu/pop_arrow.png"
 end

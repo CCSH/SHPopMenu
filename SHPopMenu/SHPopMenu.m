@@ -13,24 +13,20 @@
  **/
 @interface SHPopMenu()<UITableViewDataSource,UITableViewDelegate>
 
-/**
- 内容展示
- */
-@property (nonatomic, strong) UITableView *contentView;
-/**
- 最底部的遮盖 ：屏蔽除菜单以外控件的事件
- */
-@property (nonatomic, weak) UIButton *cover;
-/**
- 容器 ：容纳具体要显示的内容contentView
- */
-@property (nonatomic, weak) UIView *container;
-/**
- 箭头
- **/
-@property (nonatomic, weak) UIImageView *imageArrow;
+//蒙版
+@property (nonatomic, strong) UIButton *maskView;
 
-@property (nonatomic, assign) void(^block)(SHPopMenu *menu,NSInteger index);
+//容器 (设置背景颜色与内容)
+@property (nonatomic, strong) UIImageView *container;
+
+//箭头
+@property (nonatomic, strong) UIImageView *imageArrow;
+
+//内容展示
+@property (nonatomic, strong) UITableView *contentView;
+
+//点击回调
+@property (nonatomic, copy) void(^block)(SHPopMenu *menu,NSInteger index);
 
 @end
 
@@ -38,72 +34,67 @@
 
 static NSString *reuseIdentifier = @"cell";
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    self.cover.frame = self.bounds;
+#pragma mark - 懒加载
+- (UIButton *)maskView{
+    if (!_maskView) {
+        _maskView = [UIButton buttonWithType:UIButtonTypeCustom];
+        _maskView.backgroundColor = [UIColor clearColor];
+        [_maskView addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_maskView];
+    }
+    return _maskView;
 }
 
-#pragma mark - 懒加载
+- (UIImageView *)container{
+    if (!_container) {
+        _container = [[UIImageView alloc] init];
+        _container.userInteractionEnabled = YES;
+        
+        _container.backgroundColor = [UIColor colorWithRed:42/255.0 green:42/255.0 blue:42/255.0 alpha:1];
+        
+        _container.layer.cornerRadius = 2;
+        _container.layer.borderWidth = 1;
+        _container.layer.masksToBounds = YES;
+        _container.layer.borderColor = [UIColor clearColor].CGColor;
+        
+        [self addSubview:_container];
+    }
+    return _container;
+}
+
 - (UITableView *)contentView{
     //创建tabview
     if (!_contentView) {
         _contentView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) style:UITableViewStylePlain];
         _contentView.delegate = self;
         _contentView.dataSource = self;
-        _contentView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        _contentView.backgroundColor = [UIColor whiteColor];
-        _contentView.scrollEnabled = NO;
+        _contentView.separatorInset = UIEdgeInsetsZero;
         _contentView.bounces = YES;
         _contentView.showsVerticalScrollIndicator = NO;
+        _contentView.backgroundColor = [UIColor clearColor];
         //内容
         [self.container addSubview:_contentView];
     }
     return _contentView;
 }
 
-- (UIButton *)cover{
-    if (!_cover) {
-        // 添加一个遮盖按钮
-        UIButton *cover = [[UIButton alloc] init];
-        cover.backgroundColor = [UIColor clearColor];
-        [cover addTarget:self action:@selector(coverClick) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:cover];
-        _cover = cover;
-    }
-    return _cover;
-}
-
-- (UIView *)container{
-    if (!_container) {
-        // 添加背景
-        UIView *container = [[UIView alloc] init];
-        container.backgroundColor = [UIColor whiteColor];
-        container.layer.cornerRadius = 5;
-        container.layer.borderWidth = 1;
-        container.layer.borderColor = [UIColor clearColor].CGColor;
-        container.userInteractionEnabled = YES;
-        [self addSubview:container];
-        _container = container;
-    }
-    return _container;
-}
-
 - (UIImageView *)imageArrow{
     if (!_imageArrow) {
         //箭头
         UIImageView *imageArrow = [[UIImageView alloc]init];
+        imageArrow.frame = CGRectMake(0, 0, 16, 7);
+        
         NSBundle *bundle = [NSBundle bundleForClass:self.class];
-        NSString *file = [bundle pathForResource:@"popu_arrow" ofType:@"png"];
-        UIImage *image = [UIImage imageWithContentsOfFile:file];
-        imageArrow.image = image;
+        NSString *file = [bundle pathForResource:@"pop_arrow" ofType:@"png"];
+        imageArrow.image = [UIImage imageWithContentsOfFile:file];
+        
         [self addSubview:imageArrow];
         _imageArrow = imageArrow;
     }
     return _imageArrow;
 }
 
+#pragma mark - SET
 - (void)setMList:(NSArray *)mList{
     _mList = mList;
     
@@ -133,26 +124,47 @@ static NSString *reuseIdentifier = @"cell";
     }
 }
 
+- (void)setDimBackground:(BOOL)dimBackground{
+    
+    _dimBackground = dimBackground;
+    
+    if (dimBackground) {
+        self.maskView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
+    } else {
+        self.maskView.backgroundColor = [UIColor clearColor];
+    }
+}
+
+- (void)setContentColor:(UIColor *)contentColor{
+    _contentColor = contentColor;
+    self.container.backgroundColor = contentColor;
+}
+
+- (void)setContentImage:(UIImage *)contentImage{
+    _contentImage = contentImage;
+    self.container.image = contentImage;
+}
+
 #pragma mark - 内部方法
-- (void)coverClick
-{
+- (void)btnAction{
+    
     [self dismiss];
 }
 
 #pragma mark - 公共方法
-- (void)setDimBackground:(BOOL)dimBackground
-{
-    _dimBackground = dimBackground;
+- (void)showInRectX:(int)x rectY:(int)y block:(void (^)(SHPopMenu *, NSInteger))block{
     
-    if (dimBackground) {
-        self.cover.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
-    } else {
-        self.cover.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
+    if (!self.mList.count) {
+        NSLog(@"先设置 mList");
+        return;
     }
-}
-
-- (void)showInRectX:(int)x rectY:(int)y block:(void (^)(SHPopMenu *, NSInteger))block;
-{
+    
+    //初始化
+    self.contentH = self.contentH?:44;
+    self.font = self.font?:[UIFont systemFontOfSize:14];
+    self.textColor = self.textColor?:[UIColor whiteColor];
+    self.separatorColor = self.separatorColor?:[UIColor whiteColor];
+    
     //赋值
     self.block = block;
     
@@ -161,64 +173,64 @@ static NSString *reuseIdentifier = @"cell";
     self.frame = window.bounds;
     [window addSubview:self];
     
+    self.maskView.frame = self.bounds;
+    
     // 设置容器的frame
     long count = self.mList.count;
     long height = self.contentH*count;
     
-    CGFloat max_h = self.superview.frame.size.height - y - 7 - 50;
+    //气派距离下方 50
+    CGFloat max_h = window.frame.size.height - y - CGRectGetHeight(self.imageArrow.frame) - 50;
     
+    //超过最大则用最大的 弹框内部滑动
     if (height > max_h) {
         height = max_h;
-        self.contentView.scrollEnabled = YES;
     }
-
-    self.container.frame = CGRectMake(x , y + 6.5, self.menuW, height);
     
-    // 设置容器里面内容的frame
-    CGFloat topMargin = 2;
-    CGFloat leftMargin = 2;
-    CGFloat rightMargin = 2;
-    CGFloat bottomMargin = 2;
-    CGRect frame;
-    frame.origin.y = topMargin;
-    frame.origin.x = leftMargin;
-    frame.size.width = self.container.frame.size.width - leftMargin - rightMargin;
-    frame.size.height = self.container.frame.size.height - topMargin - bottomMargin;
-    self.contentView.frame = frame;
+    //设置内容
+    self.container.frame = CGRectMake(x , y + CGRectGetHeight(self.imageArrow.frame), self.menuW, height);
+    self.contentView.frame = self.container.bounds;
+    self.contentView.separatorColor = self.separatorColor;
     
     //设置箭头frame
-    switch (_arrowPosition) {
-        case SHPopMenuArrowPositionLeft://左
-            self.imageArrow.frame = CGRectMake(x + 10, y, self.contentH, 7);
-            break;
+    CGRect frame = self.imageArrow.frame;
+    frame.origin.y = y;
+    
+    switch (self.arrowPosition) {
         case SHPopMenuArrowPositionCenter://中
-            self.imageArrow.frame = CGRectMake(x + self.menuW/2 - 15, y, self.contentH, 7);
+        {
+            frame.origin.x = self.container.center.x - CGRectGetWidth(self.imageArrow.frame)/2;
+        }
             break;
-        case SHPopMenuArrowPositionRight://右
-            self.imageArrow.frame = CGRectMake(x + self.menuW - 35,y, self.contentH, 7);
+        case SHPopMenuArrowPositionLeft://左
+        {
+            frame.origin.x = x + 10;
+        }
             break;
-        default://左
-            self.imageArrow.frame = CGRectMake(x + 10, y, self.contentH, 7);
+        default://右
+        {
+            frame.origin.x = x + self.menuW - CGRectGetWidth(self.imageArrow.frame) - 10;
+        }
             break;
     }
+    
+    self.imageArrow.frame = frame;
     
     //刷新
     [self.contentView reloadData];
 }
 
 #pragma mark 消失
-- (void)dismiss
-{
+- (void)dismiss{
+    
     [self removeFromSuperview];
 }
 
 #pragma mark - Table view data source
-#pragma mark 返回分组数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-#pragma mark 返回每组行数
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.mList.count;
 }
@@ -230,10 +242,11 @@ static NSString *reuseIdentifier = @"cell";
     if (cell == nil) {
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell.backgroundColor = [UIColor clearColor];
         
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.textLabel.font = [UIFont systemFontOfSize:14];
-        cell.imageView.backgroundColor = [UIColor lightGrayColor];
+        cell.textLabel.font = self.font;
+        cell.textLabel.textColor = self.textColor;
     }
     
     //取出内容
@@ -243,6 +256,7 @@ static NSString *reuseIdentifier = @"cell";
         
         NSDictionary *dic = obj;
         cell.textLabel.text = dic.allValues[0];
+        cell.imageView.backgroundColor = [UIColor lightGrayColor];
         cell.imageView.image = [self imageWithImage:[UIImage imageNamed:dic.allKeys[0]] size:CGSizeMake(self.contentH/2, self.contentH/2)];
     }else if ([obj isKindOfClass:[NSString class]]){//字符串：只有内容
         
@@ -261,6 +275,9 @@ static NSString *reuseIdentifier = @"cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //消失
+    [self dismiss];
     
     if (self.block) {
         self.block(self,indexPath.row);
