@@ -69,7 +69,7 @@ static NSString *reuseIdentifier = @"cell";
         _contentView.delegate = self;
         _contentView.dataSource = self;
         _contentView.separatorInset = UIEdgeInsetsZero;
-        _contentView.bounces = YES;
+        _contentView.bounces = NO;
         _contentView.showsVerticalScrollIndicator = NO;
         _contentView.backgroundColor = [UIColor clearColor];
         //内容
@@ -98,28 +98,31 @@ static NSString *reuseIdentifier = @"cell";
 - (void)setMList:(NSArray *)mList{
     _mList = mList;
     
-    //计算宽度
-    self.menuW = 0.0;
-    for (id obj in mList) {
-        
-        if ([obj isKindOfClass:[NSDictionary class]]) {//文字 + 图片
+    //不存在则计算
+    if (!self.menuW) {
+        //计算宽度
+        self.menuW = 0.0;
+        for (id obj in mList) {
             
-            NSDictionary *dic = (NSDictionary *)obj;
-            CGSize size = [dic.allValues[0] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX)  options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
-            //宽度(文字 + 图片 + 左右的间距)
-            self.menuW = MAX(size.width + 75, self.menuW);
-            
-        }else if ([obj isKindOfClass:[NSString class]]){//文字
-            
-            CGSize size = [obj boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
-            //宽度(文字 + 左右的间距)
-            self.menuW = MAX(size.width + 40, self.menuW);
-            
-        }else if ([obj isKindOfClass:[NSAttributedString class]]){//富文本
-            NSAttributedString *att = (NSAttributedString *)obj;
-            CGSize size = [att boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-            //宽度(文字 + 左右的间距)
-            self.menuW = MAX(size.width + 40, self.menuW);
+            if ([obj isKindOfClass:[NSDictionary class]]) {//文字 + 图片
+                
+                NSDictionary *dic = (NSDictionary *)obj;
+                CGSize size = [dic.allValues[0] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX)  options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
+                //宽度(文字 + 图片 + 左右的间距)
+                self.menuW = MAX(size.width + 75, self.menuW);
+                
+            }else if ([obj isKindOfClass:[NSString class]]){//文字
+                
+                CGSize size = [obj boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]} context:nil].size;
+                //宽度(文字 + 左右的间距)
+                self.menuW = MAX(size.width + 40, self.menuW);
+                
+            }else if ([obj isKindOfClass:[NSAttributedString class]]){//富文本
+                NSAttributedString *att = (NSAttributedString *)obj;
+                CGSize size = [att boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+                //宽度(文字 + 左右的间距)
+                self.menuW = MAX(size.width + 40, self.menuW);
+            }
         }
     }
 }
@@ -143,6 +146,11 @@ static NSString *reuseIdentifier = @"cell";
 - (void)setContentImage:(UIImage *)contentImage{
     _contentImage = contentImage;
     self.container.image = contentImage;
+}
+
+- (void)setArrowImage:(UIImage *)arrowImage{
+    _arrowImage = arrowImage;
+    self.imageArrow.image = arrowImage;
 }
 
 #pragma mark - 内部方法
@@ -179,7 +187,7 @@ static NSString *reuseIdentifier = @"cell";
     long count = self.mList.count;
     long height = self.contentH*count;
     
-    //气派距离下方 50
+    //气泡距离下方 50
     CGFloat max_h = window.frame.size.height - y - CGRectGetHeight(self.imageArrow.frame) - 50;
     
     //超过最大则用最大的 弹框内部滑动
@@ -194,26 +202,7 @@ static NSString *reuseIdentifier = @"cell";
     
     //设置箭头frame
     CGRect frame = self.imageArrow.frame;
-    frame.origin.y = y;
-    
-    switch (self.arrowPosition) {
-        case SHPopMenuArrow_center://中
-        {
-            frame.origin.x = self.container.center.x - CGRectGetWidth(self.imageArrow.frame)/2;
-        }
-            break;
-        case SHPopMenuArrow_left://左
-        {
-            frame.origin.x = x + 10;
-        }
-            break;
-        default://右
-        {
-            frame.origin.x = x + self.menuW - CGRectGetWidth(self.imageArrow.frame) - 10;
-        }
-            break;
-    }
-    
+    frame.origin = CGPointMake(self.container.frame.origin.x + self.arrowX, y);
     self.imageArrow.frame = frame;
     
     //刷新

@@ -39,11 +39,12 @@
     if (!_menu) {
         _menu = [[SHPopMenu alloc]init];
         _menu.dimBackground = YES;
-        _menu.arrowPosition = SHPopMenuArrow_right;
+        
 //        //图片+文字
 //        _menu.mList = @[@{@"icon":@"发起群聊"},@{@"icon":@"添加朋友"},@{@"icon":@"扫一扫"},@{@"icon":@"收付款"}];
         
         _menu.mList = @[@"发起群聊",@"添加朋友",@"扫一扫",@"收付款"];
+        _menu.arrowX = _menu.menuW - 16 - 10;
     }
     return _menu;
 }
