@@ -1,6 +1,7 @@
 
 >气泡弹框
 # 使用 pod 导入
+[![Pod Version](http://img.shields.io/cocoapods/v/SHPopMenu.svg?style=flat)](http://cocoadocs.org/docsets/SHPopMenu/)
 ```
 pod 'SHPopMenu'
 ```
